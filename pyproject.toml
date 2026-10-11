@@ -1,0 +1,26 @@
+# Workspace root for the LangChain course.
+# One shared .venv and one uv.lock for every project folder listed below.
+# Each folder declares its own dependencies in its own pyproject.toml.
+
+[project]
+name = "langchain-course"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "black~=26.3",
+    "isort~=8.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = [
+    "01_hello_langchain",
+    "02_search_engine",
+    "03_react_agents_in_detail",
+    "04_intro_to_rag",
+]

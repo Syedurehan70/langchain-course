@@ -1,14 +1,14 @@
 [project]
-name = "langchain-course"
+name = "hello-langchain"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.10"
+description = "First chain: PromptTemplate | ChatGroq summarising a bio."
+requires-python = ">=3.12"
 dependencies = [
-    "black>=26.3.1",
-    "isort>=8.0.1",
-    "langchain>=1.2.13",
-    "langchain-ollama>=1.0.1",
-    "langchain-openai>=1.1.11",
-    "python-dotenv>=1.2.2",
+    "langchain-core~=1.6",
+    "langchain-groq~=1.1",
+    "groq~=0.37",
+    "python-dotenv~=1.2",
 ]
+
+[tool.uv]
+package = false

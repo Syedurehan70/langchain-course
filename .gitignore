@@ -1,0 +1,24 @@
+# Secrets: every .env anywhere in the repo stays local
+.env
+.env.*
+!.env.example
+
+# Python / uv
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+
+# Generated artifacts
+faiss_index/
+chroma_db/
+
+# Local-only material (not part of the course code)
+research_papers_to_read/
+packages.doc
+_old/
+_setup/
