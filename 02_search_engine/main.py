@@ -6,11 +6,11 @@ import json
 load_dotenv()
 
 from langchain.agents import create_agent
+from langchain.agents.middleware import ToolCallLimitMiddleware
 from langchain.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from langchain_groq import ChatGroq
 from langchain_tavily import TavilySearch
-from langgraph.errors import GraphRecursionError
 
 
 class Source(BaseModel):
@@ -22,7 +22,8 @@ class AgentResponse(BaseModel):
     """Schema for agent response with answer and sources"""
     answer: str = Field(description="The agent's answer to the query")
     sources: List[Source] = Field(
-        default_factory=list, description="List of sources used to generate the answer"
+        default_factory=list,
+        description="List of sources used to generate the answer"
     )
 
 
@@ -53,7 +54,20 @@ def search(query: str) -> str:
 
 
 llm = ChatGroq(model="openai/gpt-oss-20b")
-agent = create_agent(model=llm, tools=[search])
+MAX_SEARCHES = 3
+
+# Hard cap on searches. The model decides when it has enough, but this
+# middleware decides when it must stop: after MAX_SEARCHES calls the run
+# ends cleanly instead of looping into GraphRecursionError.
+agent = create_agent(
+    model=llm,
+    tools=[search],
+    middleware=[
+        ToolCallLimitMiddleware(
+            tool_name="search", run_limit=MAX_SEARCHES, exit_behavior="end"
+        )
+    ],
+)
 plain_llm = ChatGroq(model="openai/gpt-oss-20b")
 
 QUERY = (
@@ -65,11 +79,14 @@ QUERY = (
 def run(query: str) -> AgentResponse:
     result = agent.invoke(
         {"messages": [HumanMessage(content=query)]},
-        config={"recursion_limit": 14},
+        config={"recursion_limit": 20},
     )
 
     tool_output = "\n\n".join(
-        m.content for m in result["messages"] if isinstance(m, ToolMessage)
+        m.content
+        for m in result["messages"]
+        # status == "error" is the limit notice from the middleware, not a result
+        if isinstance(m, ToolMessage) and m.status == "success"
     )
     if not tool_output.strip():
         raise RuntimeError("No tool output — the agent never called search")
