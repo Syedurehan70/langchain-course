@@ -11,6 +11,7 @@ members = [
     "hello-langchain",
     "intro-to-rag",
     "langchain-course",
+    "llm-factory",
     "react-agents-in-detail",
     "search-engine",
 ]
@@ -640,6 +641,7 @@ dependencies = [
     { name = "langchain-ollama" },
     { name = "langchain-pinecone" },
     { name = "langchain-text-splitters" },
+    { name = "llm-factory" },
     { name = "python-dotenv" },
 ]
 
@@ -649,6 +651,7 @@ requires-dist = [
     { name = "langchain-ollama", specifier = "~=1.0" },
     { name = "langchain-pinecone", specifier = ">=0.2.13" },
     { name = "langchain-text-splitters", specifier = ">=1.1.2" },
+    { name = "llm-factory", editable = "common" },
     { name = "python-dotenv", specifier = "~=1.2" },
 ]
 
@@ -1051,6 +1054,23 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/49/bf/a82bc6549ca7f45902995605466c607bdcf57deacbaab87f502c9d143653/langsmith-0.14.7.tar.gz", hash = "sha256:10ead0e0134ae2ee49371091e9d996e7f32a6103bc35860d55c26ee42d975bee", size = 5001042, upload-time = "2026-10-09T16:32:09.943Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/14/cc/85910477cdf1cadd0ae7f9fe4e81fff793f0423d70c6a82e7b4a88874f8f/langsmith-0.14.7-py3-none-any.whl", hash = "sha256:748538d163cd073879106837d7f0892f34849655ba43cbb5aa5e21509e24423d", size = 861973, upload-time = "2026-10-09T16:32:07.815Z" },
+]
+
+[[package]]
+name = "llm-factory"
+version = "0.1.0"
+source = { editable = "common" }
+dependencies = [
+    { name = "langchain" },
+    { name = "langchain-groq" },
+    { name = "langchain-ollama" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "langchain", specifier = "~=1.3.18" },
+    { name = "langchain-groq", specifier = "~=1.1" },
+    { name = "langchain-ollama", specifier = "~=1.0" },
 ]
 
 [[package]]
@@ -1966,6 +1986,7 @@ dependencies = [
     { name = "langchain-groq" },
     { name = "langchain-tavily" },
     { name = "langgraph" },
+    { name = "llm-factory" },
     { name = "pydantic" },
     { name = "python-dotenv" },
 ]
@@ -1977,6 +1998,7 @@ requires-dist = [
     { name = "langchain-groq", specifier = "~=1.1" },
     { name = "langchain-tavily", specifier = "~=0.2.18" },
     { name = "langgraph", specifier = "~=1.2.11" },
+    { name = "llm-factory", editable = "common" },
     { name = "pydantic", specifier = "~=2.13" },
     { name = "python-dotenv", specifier = "~=1.2" },
 ]

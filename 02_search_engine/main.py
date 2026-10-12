@@ -9,8 +9,8 @@ from langchain.agents import create_agent
 from langchain.agents.middleware import ToolCallLimitMiddleware
 from langchain.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
-from langchain_groq import ChatGroq
 from langchain_tavily import TavilySearch
+from llm_factory import get_llm, supports
 
 
 class Source(BaseModel):
@@ -53,7 +53,16 @@ def search(query: str) -> str:
     return json.dumps(trimmed)
 
 
-llm = ChatGroq(model="openai/gpt-oss-20b")
+llm = get_llm("agent")
+plain_llm = get_llm("structurer")
+
+# This file structures the output in a separate, tool-free call (the
+# "two-step" pattern). That is only *required* when the agent's provider
+# can't combine tools with structured output; say so when it can.
+if supports("agent", "tools_with_structured_output"):
+    print("[note] agent provider supports tools + structured output; "
+          "see main_toolstrategy.py for the one-step version")
+
 MAX_SEARCHES = 3
 
 # Hard cap on searches. The model decides when it has enough, but this
@@ -68,7 +77,6 @@ agent = create_agent(
         )
     ],
 )
-plain_llm = ChatGroq(model="openai/gpt-oss-20b")
 
 QUERY = (
     "Find 3 job postings for an AI engineer using LangChain in the Bay Area. "
